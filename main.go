@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -23,8 +24,15 @@ import (
 // Go Web开发较通用的脚手架模板
 
 func main() {
+	//if len(os.Args) < 2 {
+	//	fmt.Println("need config file. eg: bulebell config.yaml")
+	//	return
+	//}
+	var configPath string
+	flag.StringVar(&configPath, "f", "./conf/config.yaml", "配置文件的路径")
+	flag.Parse()
 	//	1.加载配置文件
-	if err := settings.Init(); err != nil {
+	if err := settings.Init(configPath); err != nil {
 		fmt.Printf("init settings failed,err:%v\n", err)
 		return
 	}

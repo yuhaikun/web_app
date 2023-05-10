@@ -7,3 +7,14 @@
 {"level":"INFO","time":"2023-05-10T16:29:03.990+0800","caller":"logger/logger.go:75","msg":"/favicon.ico","status":404,"method":"GET","path":"/favicon.ico","query":"","ip":"127.0.0.1","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36","errors":"","cost":0}
 {"level":"INFO","time":"2023-05-10T16:29:38.151+0800","caller":"web_app/main.go:74","msg":"Shutdown Server ..."}
 {"level":"INFO","time":"2023-05-10T16:29:38.151+0800","caller":"web_app/main.go:83","msg":"Server exiting"}
+{"level":"DEBUG","time":"2023-05-10T19:49:30.016+0800","caller":"web_app/main.go:42","msg":"logger init success..."}
+{"level":"INFO","time":"2023-05-10T19:49:34.622+0800","caller":"web_app/main.go:79","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2023-05-10T19:49:34.622+0800","caller":"web_app/main.go:88","msg":"Server exiting"}
+{"level":"DEBUG","time":"2023-05-10T19:54:13.793+0800","caller":"web_app/main.go:42","msg":"logger init success..."}
+{"level":"INFO","time":"2023-05-10T19:54:15.475+0800","caller":"web_app/main.go:79","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2023-05-10T19:54:15.475+0800","caller":"web_app/main.go:88","msg":"Server exiting"}
+{"level":"DEBUG","time":"2023-05-10T20:34:36.123+0800","caller":"web_app/main.go:45","msg":"logger init success..."}
+{"level":"INFO","time":"2023-05-10T20:34:50.380+0800","caller":"logger/logger.go:75","msg":"/","status":200,"method":"GET","path":"/","query":"","ip":"::1","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36","errors":"","cost":0}
+{"level":"INFO","time":"2023-05-10T20:34:51.299+0800","caller":"logger/logger.go:75","msg":"/favicon.ico","status":404,"method":"GET","path":"/favicon.ico","query":"","ip":"::1","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36","errors":"","cost":0}
+{"level":"INFO","time":"2023-05-10T21:39:17.523+0800","caller":"web_app/main.go:82","msg":"Shutdown Server ..."}
+{"level":"INFO","time":"2023-05-10T21:39:17.523+0800","caller":"web_app/main.go:91","msg":"Server exiting"}
