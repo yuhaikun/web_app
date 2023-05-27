@@ -14,6 +14,8 @@ type AppConfig struct {
 	Name         string `mapstructure:"name"`
 	Mode         string `mapstructure:"mode"`
 	Version      string `mapstructure:"version"`
+	StartTime    string `mapstructure:"start_time"`
+	MachineID    int64  `mapstructure:"machine_id"`
 	Port         int    `mapstructure:"port"`
 	*LogConfig   `mapstructure:"log"`
 	*MysqlConfig `mapstructure:"mysql"`
@@ -57,6 +59,7 @@ func Init(fileName string) (err error) {
 	//viper.AddConfigPath(".") // 指定查找配置文件的路径(相对路径)
 	//viper.AddConfigPath("./conf")
 	viper.SetConfigFile(fileName)
+
 	err = viper.ReadInConfig()
 	if err != nil {
 		// 读取配置信息失败

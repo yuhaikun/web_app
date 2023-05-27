@@ -10,9 +10,11 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"web_app/controller"
 	"web_app/dao/mysql"
 	"web_app/dao/redis"
 	"web_app/logger"
+	"web_app/pkg/snowflake"
 	"web_app/routes"
 	"web_app/settings"
 
@@ -37,7 +39,7 @@ func main() {
 		return
 	}
 	//2. 初始化日志
-	if err := logger.Init(settings.Conf.LogConfig); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig, settings.Conf.Mode); err != nil {
 		fmt.Printf("init logger failed,err:%v\n", err)
 		return
 	}
@@ -56,11 +58,22 @@ func main() {
 	}
 	defer redis.Close()
 
+	if err := snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineID); err != nil {
+		fmt.Printf("init snowflake failed,err:%v\n", err)
+		return
+	}
+
+	// 初始化gin框架内置校验器使用的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init validator trans failed,err:%v\n", err)
+		return
+	}
+
 	// 5. 注册路由
-	r := routes.Setup()
+	r := routes.SetupRouter(settings.Conf.Mode)
 	// 6. 启动服务（优雅关机）
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", viper.GetInt("app.port")),
+		Addr:    fmt.Sprintf(":%d", viper.GetInt("port")),
 		Handler: r,
 	}
 
