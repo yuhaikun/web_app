@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,9 +10,11 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	"web_app/controller"
 	"web_app/dao/mysql"
 	"web_app/dao/redis"
 	"web_app/logger"
+	"web_app/pkg/snowflake"
 	"web_app/routes"
 	"web_app/settings"
 
@@ -23,36 +26,54 @@ import (
 // Go Web开发较通用的脚手架模板
 
 func main() {
+	//if len(os.Args) < 2 {
+	//	fmt.Println("need config file. eg: bulebell config.yaml")
+	//	return
+	//}
+	var configPath string
+	flag.StringVar(&configPath, "f", "./conf/config.yaml", "配置文件的路径")
+	flag.Parse()
 	//	1.加载配置文件
-	if err := settings.Init(); err != nil {
+	if err := settings.Init(configPath); err != nil {
 		fmt.Printf("init settings failed,err:%v\n", err)
 		return
 	}
 	//2. 初始化日志
-	if err := logger.Init(); err != nil {
+	if err := logger.Init(settings.Conf.LogConfig, settings.Conf.Mode); err != nil {
 		fmt.Printf("init logger failed,err:%v\n", err)
 		return
 	}
 	defer zap.L().Sync()
 	zap.L().Debug("logger init success...")
 	//3. 初始化MySQL连接
-	if err := mysql.Init(); err != nil {
+	if err := mysql.Init(settings.Conf.MysqlConfig); err != nil {
 		fmt.Printf("init mysql failed,err:%v\n", err)
 		return
 	}
 	defer mysql.Close()
 	// 4. 初始化Redis连接
-	if err := redis.Init(); err != nil {
+	if err := redis.Init(settings.Conf.RedisConfig); err != nil {
 		fmt.Printf("init redis failed,err:%v\n", err)
 		return
 	}
 	defer redis.Close()
 
+	if err := snowflake.Init(settings.Conf.StartTime, settings.Conf.MachineID); err != nil {
+		fmt.Printf("init snowflake failed,err:%v\n", err)
+		return
+	}
+
+	// 初始化gin框架内置校验器使用的翻译器
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init validator trans failed,err:%v\n", err)
+		return
+	}
+
 	// 5. 注册路由
-	r := routes.Setup()
+	r := routes.SetupRouter(settings.Conf.Mode)
 	// 6. 启动服务（优雅关机）
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", viper.GetInt("app.port")),
+		Addr:    fmt.Sprintf(":%d", viper.GetInt("port")),
 		Handler: r,
 	}
 
